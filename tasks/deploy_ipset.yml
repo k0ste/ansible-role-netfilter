@@ -1,5 +1,5 @@
 ---
-- name: netfilter | Deploy ip sets
+- name: "netfilter | Deploy ip sets"
   ansible.builtin.template:
     src: "ipset.j2"
     dest: "{{ hostvars[inventory_hostname]['netfilter_ipset_dest'] + '/' +
@@ -18,7 +18,7 @@
     netfilter_ipset_mgmt: "[] | map(&ipset_mgmt || 'false', @) | [0]"
   notify:
     - "Restart ipset"
-- name: netfilter | Enable ipset
+- name: "netfilter | Enable ipset"
   ansible.builtin.systemd:
     name: "{{ hostvars[inventory_hostname]['netfilter_ipset_service'] }}"
     enabled: "yes"
@@ -31,4 +31,5 @@
        community.general.json_query(vars['netfilter_ipset_enable']) == 'true'"
   vars:
     netfilter_ipset_enable: "[] | map(&ipset_enable || 'false', @) | [0]"
-- meta: flush_handlers
+- name: "netfilter | Flush handlers [ipset]"
+  ansible.builtin.meta: "flush_handlers"

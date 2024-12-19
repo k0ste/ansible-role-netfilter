@@ -1,19 +1,19 @@
 {{ '## ' + hostvars[inventory_hostname]['netfilter_arptables_conf'] }}
 {{ '# ' + ansible_managed }}
-{{ '# ' + 'Do not edit manually' }}
+{{ '# Do not edit manually' }}
 
-{% for t in vars['netfilter_arptables'] %}
-{{ '*' ~ t.table }}
-{% for c in t.chains %}
-{% if c.policy is defined %}
-{{ ':' ~ c.name ~ ' ' ~ c.policy }}
+{% for t in vars['netfilter_settings_arptables'] %}
+{{ '*' ~ t['table'] }}
+{% for ct in t['chains'] %}
+{% if ct['policy'] is defined %}
+{{ ':' ~ ct['name'] + ' ' + ct['policy'] }}
 {% else %}
-{{ ':' ~ c.name ~ ' ' ~ 'ACCEPT' }}
+{{ ':' ~ t['name'] + ' ' + 'ACCEPT' }}
 {% endif %}
-{% if c.rules is defined %}
-{% for r in c.rules %}
-{% if r != '' %}
-{{ '-A' ~ ' ' ~ r }}
+{% if ct['rules'] is defined %}
+{% for ctr in ct['rules'] %}
+{% if ctr != '' %}
+{{ '-A ' ~ ctr }}
 {% endif %}
 {% endfor %}
 {% endif %}

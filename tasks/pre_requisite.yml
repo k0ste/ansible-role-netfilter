@@ -1,15 +1,12 @@
 ---
-- name: netfilter | Add the OS specific variables
+- name: "netfilter | Add the OS specific variables"
   ansible.builtin.include_vars:
     file: "{{ hostvars[inventory_hostname]['ansible_os_family'] + '.yml' }}"
-- name: netfilter | Set local facts
+- name: "netfilter | Set facts about netfilter role"
   ansible.builtin.set_fact:
-    netfilter_ipset: "{{ hostvars[inventory_hostname]['netfilter'] |
+    netfilter_settings_ipset: "{{ hostvars[inventory_hostname]['netfilter'] |
       community.general.json_query('[].netfilter_settings[].ipset[]') }}"
-    netfilter_iptables: "{{ hostvars[inventory_hostname]['netfilter'] |
+    netfilter_settings_iptables: "{{ hostvars[inventory_hostname]['netfilter'] |
       community.general.json_query('[].netfilter_settings[].iptables[]') }}"
-    netfilter_arptables: "{{ hostvars[inventory_hostname]['netfilter'] |
+    netfilter_settings_arptables: "{{ hostvars[inventory_hostname]['netfilter'] |
       community.general.json_query('[].netfilter_settings[].arptables[]') }}"
-  when:
-    - "hostvars[inventory_hostname]['netfilter'] is defined"
-    - "hostvars[inventory_hostname]['netfilter'] != ''"
